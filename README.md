@@ -13,12 +13,34 @@ Qing Han <br/>
 We used SQLite library to build our database. In our database, there are four tables.<br> 
 The first table is the periodic table.
 
-｜EID｜INT(PRIMARY KEY)｜Atomic number｜
-｜ ------ ｜ ------ ｜ ------ ｜
-｜ENAME｜VARCHAR｜Element name｜
-｜SYMBOL｜VARCHAR｜Element symbol｜
+|Attribute|Data Type|Explanation|
+| :-: | :-: | :-: |
+|EID|INT(PRIMARY KEY)|Atomic number|
+|ENAME|VARCHAR|Element name|
+|SYMBOL|VARCHAR|Element symbol|
 
-So generally a molecule is stored in the form of adjacency list. But in computing graph isomorphism, we use the Graph class of org.jgrapht library. The reason why we choose that is rather than implement a graph class ourself, we can take advantage of a user-friendly and powerful public library, which won’t bother us on thinking of the big picture of our algorithm.
+The second table is the compound table.
+|Attribute|Data Type|Explanation|
+| :-: | :-: | :-: |
+|CID|INT(PRIMARY KEY)|Compound id from PubChem|
+|CNAME|VARCHAR|Compound name|
+|ENUMBER|INT|Number of atoms|
+
+The third table is the compound element table.
+|Attribute|Data Type|Explanation|
+| :-: | :-: | :-: |
+|LID|INT|Index of the atoms in the specific compound|
+|EID|INT(CONSTRAINT cons1 FOREIGN KEY (EID) REFERENCES periodicTable(EID))|Atomic number|
+|CID|INT(CONSTRAINT cons2 FOREIGN KEY (CID) REFERENCES compound(CID))|Compound id from PubChem|
+
+The fourth table is the structure table.
+|Attribute|Data Type|Explanation|
+| :-: | :-: | :-: |
+|LID1|INT|The ordinal number of one of the two ends of a chemical bond|
+|LID2|INT|The ordinal number of one of the two ends of a chemical bond|
+|CID|INT(CONSTRAINT cons3 FOREIGN KEY (CID) REFERENCES compound(CID))|Compound id from PubChem|
+
+So generally a molecule is stored in the form of edge list. But in computing graph isomorphism, we use the Graph class of org.jgrapht library. The reason why we choose that is rather than implement a graph class ourself, we can take advantage of a user-friendly and powerful public library, which won’t bother us on thinking of the big picture of our algorithm.
 
 - - -
 ## Methods Implementation:
